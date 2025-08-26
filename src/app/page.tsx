@@ -16,28 +16,22 @@ export default function Dabble() {
   };
   const openSignup = () => setShowPopup(true);
 
-  // Muted, sophisticated palette inspired by the background image (terracotta, teal, slate, saffron, plum, forest)
+  // Muted, sophisticated palette inspired by the background image
   const accents = [
-    { name: 'terracotta', accent: '#C45E49', bg: '#F7F2EE' },
-    { name: 'teal',       accent: '#2F7A80', bg: '#EEF6F6' },
-    { name: 'slate',      accent: '#3B5566', bg: '#F1F4F6' },
-    { name: 'saffron',    accent: '#D99136', bg: '#FEF6E9' },
-    { name: 'plum',       accent: '#4A3B55', bg: '#F5F2F7' },
-    { name: 'forest',     accent: '#2E584E', bg: '#EEF5F3' },
+    { name: "terracotta", accent: "#C45E49", bg: "#F7F2EE" },
+    { name: "teal", accent: "#2F7A80", bg: "#EEF6F6" },
+    { name: "slate", accent: "#3B5566", bg: "#F1F4F6" },
+    { name: "saffron", accent: "#D99136", bg: "#FEF6E9" },
+    { name: "plum", accent: "#4A3B55", bg: "#F5F2F7" },
+    { name: "forest", accent: "#2E584E", bg: "#EEF5F3" },
   ];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white via-slate-50 to-pink-50 text-gray-900 font-sans">
       <Head>
         <title>Dabble: Try a New Activity in London</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+        {/* Font-loading handled globally in src/app/layout.tsx via next/font */}
       </Head>
-
-      <style jsx global>{`
-        body { font-family: 'Poppins', sans-serif; }
-      `}</style>
 
       {/* Top navigation with section links */}
       <nav className="sticky top-0 z-40 bg-white/80 backdrop-blur border-b">
@@ -49,7 +43,6 @@ export default function Dabble() {
             <Link href="/about" className="hover:text-blue-700">About</Link>
           </div>
           <div className="flex items-center gap-3">
-            {/* Sign in removed as requested */}
             <Button variant="outline" className="border-blue-300 text-blue-700 hover:bg-blue-50" onClick={openSignup}>Sign up</Button>
           </div>
         </div>
@@ -65,11 +58,11 @@ export default function Dabble() {
           <div className="relative z-10 w-full h-full flex flex-col items-center justify-center px-6 md:px-12 text-center">
             <h1
               className="text-white text-4xl md:text-5xl font-bold max-w-4xl mx-auto"
-              style={{ fontFamily: "'Poppins', sans-serif" }}
             >
               Leave the apps at home. Try a new activity in London this week.
             </h1>
-            {/* Filters */}
+
+            {/* Search filters */}
             <form className="mt-6 w-full max-w-4xl bg-white/95 rounded-2xl shadow-md p-4 grid grid-cols-1 md:grid-cols-4 gap-3">
               <Input placeholder="Location (e.g., Peckham)" />
               <select className="px-3 py-2 border border-gray-300 rounded-md w-full bg-white">
@@ -110,12 +103,12 @@ export default function Dabble() {
           <h2 className="text-2xl font-semibold text-blue-800 mb-4">Explore classes</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { t: 'Salsa Night – Brixton', d: 'Thursdays 7pm • £12' },
-              { t: 'Beginner Watercolours – Peckham', d: 'Saturdays 11am • £18' },
-              { t: 'Mindfulness & Breathwork – Deptford', d: 'Sundays 10am • £15' },
-              { t: 'Stand-up Improv – London Bridge', d: 'Weds 6:30pm • £20' },
-              { t: 'Wheel Throwing Taster – Camberwell', d: 'Fridays 7pm • £22' },
-              { t: 'Vietnamese Street Food – Lewisham', d: 'Sat 5pm • £28' },
+              { t: "Salsa Night – Brixton", d: "Thursdays 7pm • £12" },
+              { t: "Beginner Watercolours – Peckham", d: "Saturdays 11am • £18" },
+              { t: "Mindfulness & Breathwork – Deptford", d: "Sundays 10am • £15" },
+              { t: "Stand-up Improv – London Bridge", d: "Weds 6:30pm • £20" },
+              { t: "Wheel Throwing Taster – Camberwell", d: "Fridays 7pm • £22" },
+              { t: "Vietnamese Street Food – Lewisham", d: "Sat 5pm • £28" },
             ].map((x, i) => {
               const a = accents[i % accents.length];
               return (
