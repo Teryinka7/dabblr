@@ -32,7 +32,7 @@ export default function AboutPage() {
           <h2 className="text-3xl font-semibold text-pink-600 mb-4">What We Do</h2>
           <p className="text-gray-700 text-lg">
             We partner with creative, community-led studios across London to bring you inspiring,
-            hands-on classes. Whether you're looking to try something completely new or pick up an
+            hands-on classes. Whether you&apos;re looking to try something completely new or pick up an
             old passion, Dabble makes it easy to say &quot;yes&quot; to new experiences while meeting
             like-minded people who share your interests.
           </p>
@@ -48,7 +48,7 @@ export default function AboutPage() {
         </div>
 
         <div>
-          <h2 className="text-3xl font-semibold text-pink-600 mb-4">What’s In It For London’s Studios?</h2>
+          <h2 className="text-3xl font-semibold text-pink-600 mb-4">What&apos;s In It For London&apos;s Studios?</h2>
           <p className="text-gray-700 text-lg">
             Dabble helps studios fill empty spots in their classes by connecting them with a wider
             audience of curious Londoners looking for new experiences. We bring you highly motivated
@@ -62,7 +62,7 @@ export default function AboutPage() {
           <h2 className="text-3xl font-semibold text-pink-600 mb-4">People Behind Dabble</h2>
           <div className="flex flex-col md:flex-row items-center gap-6">
             <div className="w-32 h-32 relative rounded-full overflow-hidden border border-gray-300">
-              {/* Replace '/founder_pic.png' with your actual photo path in `public/` */}
+              {/* Ensure this file exists in public/ as founder_pic.png */}
               <Image src="/founder_pic.png" alt="Founder photo" fill style={{ objectFit: "cover" }} />
             </div>
             <p className="text-gray-700 text-lg">
@@ -88,8 +88,8 @@ export default function AboutPage() {
         <div id="join-studio">
           <h2 className="text-3xl font-semibold text-pink-600 mb-4">Join as a Studio</h2>
           <p className="text-gray-700 text-lg mb-4">
-            Are you a local studio, workshop or independent teacher? We'd love to feature your classes on
-            Dabble. Fill out the form below and we’ll be in touch.
+            Are you a local studio, workshop or independent teacher? We&apos;d love to feature your classes on
+            Dabble. Fill out the form below and we&apos;ll be in touch.
           </p>
 
           <form action="https://formspree.io/f/mzzgglav" method="POST" className="space-y-4">
