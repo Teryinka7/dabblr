@@ -34,14 +34,17 @@ export default function Dabble() {
       </Head>
 
       {/* Top navigation with section links */}
-      <nav className="sticky top-0 z-40 bg-white/80 backdrop-blur border-b">
+      <nav aria-label="Main navigation" className="sticky top-0 z-40 bg-white/80 backdrop-blur border-b">
         <div className="max-w-6xl mx-auto h-16 px-6 flex items-center justify-between">
           <Link href="/" className="text-2xl font-bold tracking-tight text-blue-700">Dabble</Link>
+
           <div className="hidden md:flex items-center gap-6 text-sm text-gray-700">
             <button onClick={() => scrollTo("explore")} className="hover:text-blue-700">Explore</button>
             <button onClick={() => scrollTo("membership")} className="hover:text-blue-700">Membership</button>
             <Link href="/about" className="hover:text-blue-700">About</Link>
+            <Link href="/join-studio" className="hover:text-blue-700">Join as a studio</Link>
           </div>
+
           <div className="flex items-center gap-3">
             <Button variant="outline" className="border-blue-300 text-blue-700 hover:bg-blue-50" onClick={openSignup}>Sign up</Button>
           </div>
@@ -63,9 +66,9 @@ export default function Dabble() {
             </h1>
 
             {/* Search filters */}
-            <form className="mt-6 w-full max-w-4xl bg-white/95 rounded-2xl shadow-md p-4 grid grid-cols-1 md:grid-cols-4 gap-3">
+            <form className="mt-6 w-full max-w-4xl bg-white/95 rounded-2xl shadow-md p-4 grid grid-cols-1 md:grid-cols-4 gap-3" role="search">
               <Input placeholder="Location (e.g., Peckham)" />
-              <select className="px-3 py-2 border border-gray-300 rounded-md w-full bg-white">
+              <select className="px-3 py-2 border border-gray-300 rounded-md w-full bg-white" aria-label="Category">
                 <option value="">Category</option>
                 <option>Pottery</option>
                 <option>Dance</option>
@@ -74,7 +77,7 @@ export default function Dabble() {
                 <option>Improv</option>
                 <option>Mindfulness</option>
               </select>
-              <Input type="date" />
+              <Input type="date" aria-label="Date" />
               <Button className="w-full bg-blue-600 hover:bg-blue-700" type="button" onClick={() => scrollTo("explore")}>Search</Button>
             </form>
           </div>
@@ -87,7 +90,7 @@ export default function Dabble() {
           <div className="bg-white p-8 rounded-lg shadow-lg text-center max-w-md w-full">
             <h2 className="text-2xl font-semibold text-blue-600 mb-4">Join Our Beta</h2>
             <p className="text-gray-600 mb-4">Be the first to access early classes and offers.</p>
-            <form action="https://formspree.io/f/mzzgglav" method="POST" className="flex gap-3">
+            <form action="https://formspree.io/f/mzzgglav" method="POST" className="flex gap-3" aria-label="Beta signup">
               <input type="email" name="email" required placeholder="Your email" className="px-3 py-2 border border-gray-300 rounded-md w-full" />
               <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded whitespace-nowrap">Sign Up</button>
             </form>
