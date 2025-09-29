@@ -2,6 +2,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import type { SVGProps } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -18,6 +19,14 @@ import {
   Sparkles,
 } from "lucide-react";
 
+declare global {
+  interface Window {
+    turnstile?: {
+     reset?: (el: Element) => void;
+    };
+  }
+}
+
 // ====== ENV (site key is safe to expose) ======
 const TURNSTILE_SITE_KEY =
   process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "";
@@ -32,13 +41,13 @@ const Brand = () => (
   </span>
 );
 
-const UsersIcon = (props: any) => (
+const UsersIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
 );
-const BarChartIcon = (props: any) => (
+const BarChartIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" x2="12" y1="20" y2="10"/><line x1="18" x2="18" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="16"/></svg>
 );
-const ClockIcon = (props: any) => (
+const ClockIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
 );
 
@@ -108,20 +117,16 @@ function SignupForm({
       setMsg({ type: "ok", text: "Thanks! Please check your inbox." });
       setEmail("");
       onSuccess?.();
-    } catch (err: any) {
-      setMsg({
-        type: "err",
-        text: err?.message || "Something went wrong. Please try again.",
-      });
+    } catch (err: unknown) {
+      const text = err instanceof Error ? err.message : "Something went wrong. Please try again.";
+      setMsg({ type: "err", text });
     } finally {
       setSubmitting(false);
-      // reset widget
-      // @ts-ignore
-      if (window.turnstile && formRef.current) {
-        // @ts-ignore
+            if (formRef.current) {
         const widget = formRef.current.querySelector(".cf-turnstile");
-        // @ts-ignore
-        if (widget && window.turnstile.reset) window.turnstile.reset(widget);
+        if (widget && window.turnstile?.reset) {
+          window.turnstile.reset(widget);
+        }
       }
     }
   };
@@ -487,7 +492,7 @@ export default function Dabble() {
                 icon: <CalendarCheck size={32} />,
                 title: "Book Your Classes",
                 description:
-                  "Use your monthly credits to book any class included in your plan. It's all managed in one place.",
+                  "Use your monthly credits to book any class included in your plan. It&apos;s all managed in one place.",
               },
               {
                 icon: <Sparkles size={32} />,
@@ -586,7 +591,7 @@ export default function Dabble() {
                     { icon: <BarChartIcon className="h-5 w-5 mx-auto" />, label: "Level", value: detailsModal.item.meta.level },
                     { icon: <ClockIcon className="h-5 w-5 mx-auto" />, label: "Duration", value: detailsModal.item.meta.duration },
                   ].map((m) => (
-                    <div key={m.label} className="flex flex-col items-center justify-start" style={{ color: detailsModal.accent.accent }}>
+                    <div key={m.label} className="flex flex-col items-center justify-start" style={{ color: detailsModal.accent?.accent }}>
                       {m.icon}
                       <div className="font-semibold text-sm mt-1 text-gray-800">{m.value}</div>
                       <div className="text-xs text-gray-600">{m.label}</div>
