@@ -63,23 +63,27 @@ export default function RootLayout({
               </Link>
             </nav>
 
-            {/* Right: actions */}
-            <div className="flex items-center justify-end gap-3">
-              {/* Sign up anchor — keeps header server-only (no client handlers) */}
-              <Link
-                href="/#signup"
-                className="hidden sm:inline-block bg-white border border-gray-300 text-gray-800 px-4 py-2 rounded shadow hover:bg-gray-50"
-              >
-                Sign up
-              </Link>
+{/* Right: actions */}
+<div className="flex items-center justify-end gap-3">
+  {/* Sign up now opens the modal on the homepage */}
+  <Link
+    href="/#signup"
+    id="open-signup"
+    data-open-signup
+    role="button"
+    className="hidden sm:inline-block bg-white border border-gray-300 text-gray-800 px-4 py-2 rounded shadow hover:bg-gray-50"
+  >
+    Sign up
+  </Link>
 
-              {/* Mobile fallback: show a compact menu text on very small screens */}
-              <div className="md:hidden">
-                <Link href="/" className="text-sm text-gray-700">
-                  Menu
-                </Link>
-              </div>
-            </div>
+  {/* Mobile fallback */}
+  <div className="md:hidden">
+    <Link href="/" className="text-sm text-gray-700">
+      Menu
+    </Link>
+  </div>
+</div>
+
           </div>
         </header>
 
