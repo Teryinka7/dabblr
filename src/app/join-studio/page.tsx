@@ -1,13 +1,13 @@
 // src/app/join-studio.tsx
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 // Updated icons for the new benefits list
-import { TrendingUp, Plus, Minus, Zap, Map, Clock, Star } from "lucide-react"; 
+import { TrendingUp, Plus, Minus, Map, Clock, Star } from "lucide-react"; 
 import Script from "next/script";
 
 // Assuming these are available globally or defined here for this page
@@ -35,10 +35,15 @@ const Brand = () => (
 );
 
 // Form Component
-function StudioSignupForm({ brandPrimary, brandPrimaryHover }) {
-  const formRef = useRef(null);
+type StudioSignupFormProps = {
+  brandPrimary: string;
+  brandPrimaryHover: string;
+};
+
+function StudioSignupForm({ brandPrimary, brandPrimaryHover }: StudioSignupFormProps) {
+  const formRef = useRef<HTMLFormElement>(null);
   const [submitting, setSubmitting] = useState(false);
-  const [msg, setMsg] = useState(null);
+  const [msg, setMsg] = useState<{ type: "ok" | "err"; text: string } | null>(null);
   
   // State for all seven form fields
   const [businessName, setBusinessName] = useState("");
@@ -56,7 +61,25 @@ function StudioSignupForm({ brandPrimary, brandPrimaryHover }) {
     return el?.value || "";
   };
 
-  const handleSubmit = async (e) => {
+  interface StudioSignupFormData {
+    businessName: string;
+    contactName: string;
+    email: string;
+    phone: string;
+    location: string;
+    bookingSoftware: string;
+    message: string;
+    token: string;
+  }
+
+  interface StudioSignupFormMsg {
+    type: "ok" | "err";
+    text: string;
+  }
+
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     e.preventDefault();
     setMsg(null);
 
@@ -68,14 +91,29 @@ function StudioSignupForm({ brandPrimary, brandPrimaryHover }) {
 
     try {
       setSubmitting(true);
-      
+
       // === Placeholder API Call (Replace with your actual endpoint) ===
       // This is where you would post the form data
       // Data to send: { businessName, contactName, email, phone, location, bookingSoftware, message, token }
-      await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate network delay
-      
-      setMsg({ type: "ok", text: "Application submitted! We will be in touch soon to discuss next steps." });
-      
+      const formData: StudioSignupFormData = {
+        businessName,
+        contactName,
+        email,
+        phone,
+        location,
+        bookingSoftware,
+        message,
+        token,
+      };
+
+      await new Promise<void>((resolve) => setTimeout(resolve, 1500)); // Simulate network delay
+
+      const successMsg: StudioSignupFormMsg = {
+        type: "ok",
+        text: "Application submitted! We will be in touch soon to discuss next steps.",
+      };
+      setMsg(successMsg);
+
       // Clear form fields after successful submission
       setBusinessName("");
       setContactName("");
@@ -84,10 +122,13 @@ function StudioSignupForm({ brandPrimary, brandPrimaryHover }) {
       setLocation("");
       setBookingSoftware("");
       setMessage("");
-
     } catch (err) {
-      const text = err instanceof Error ? err.message : "Something went wrong. Please try again.";
-      setMsg({ type: "err", text });
+      const text =
+        err instanceof Error
+          ? err.message
+          : "Something went wrong. Please try again.";
+      const errorMsg: StudioSignupFormMsg = { type: "err", text };
+      setMsg(errorMsg);
     } finally {
       setSubmitting(false);
       // Reset Turnstile widget
@@ -186,7 +227,7 @@ function StudioSignupForm({ brandPrimary, brandPrimaryHover }) {
           onChange={(e) => setMessage(e.target.value)}
           required
           className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-opacity-50 resize-none"
-          style={{ borderColor: brandPrimary, outlineColor: brandPrimary, focusRingColor: brandPrimary }}
+          style={{ borderColor: brandPrimary, outlineColor: brandPrimary }}
         />
       </div>
 
@@ -227,7 +268,13 @@ function StudioSignupForm({ brandPrimary, brandPrimaryHover }) {
 }
 
 // FAQ Accordion Item Component
-const FAQItem = ({ question, answer, brandPrimary }) => {
+type FAQItemProps = {
+  question: string;
+  answer: string;
+  brandPrimary: string;
+};
+
+const FAQItem = ({ question, answer, brandPrimary }: FAQItemProps) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="border-b border-gray-200 last:border-b-0">
