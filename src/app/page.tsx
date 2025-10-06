@@ -476,7 +476,7 @@ export default function Dabble() {
               Your Curiosity, Unboxed
             </h2>
             <p className="mt-2 text-lg text-gray-600">
-              A simple membership to unlock your city's best creative classes.
+              A simple membership to unlock your new hobby.
             </p>
           </div>
           <div className="relative mt-12 grid md:grid-cols-3 gap-8">
@@ -492,13 +492,13 @@ export default function Dabble() {
                 icon: <CalendarCheck size={32} />,
                 title: "Book Your Classes",
                 description:
-                  "Use your monthly credits to book any class included in your plan. It&apos;s all managed in one place.",
+                  "Use your monthly credits to book any class included in your plan. It's all managed in one place.",
               },
               {
                 icon: <Sparkles size={32} />,
                 title: "Enjoy & Repeat",
                 description:
-                  "Show up, have fun, and discover a new hobby. Your credits reset every month.",
+                  "Show up, meet likeminded people, discover a new hobby. Your credits reset every month.",
               },
             ].map((step) => (
               <div
