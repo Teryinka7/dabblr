@@ -95,16 +95,16 @@ function StudioSignupForm({ brandPrimary, brandPrimaryHover }: StudioSignupFormP
       // === Placeholder API Call (Replace with your actual endpoint) ===
       // This is where you would post the form data
       // Data to send: { businessName, contactName, email, phone, location, bookingSoftware, message, token }
-      const formData: StudioSignupFormData = {
-        businessName,
-        contactName,
-        email,
-        phone,
-        location,
-        bookingSoftware,
-        message,
-        token,
-      };
+      // const formData: StudioSignupFormData = {
+      //   businessName,
+      //   contactName,
+      //   email,
+      //   phone,
+      //   location,
+      //   bookingSoftware,
+      //   message,
+      //   token,
+      // };
 
       await new Promise<void>((resolve) => setTimeout(resolve, 1500)); // Simulate network delay
 
