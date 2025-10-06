@@ -61,16 +61,16 @@ function StudioSignupForm({ brandPrimary, brandPrimaryHover }: StudioSignupFormP
     return el?.value || "";
   };
 
-  interface StudioSignupFormData {
-    businessName: string;
-    contactName: string;
-    email: string;
-    phone: string;
-    location: string;
-    bookingSoftware: string;
-    message: string;
-    token: string;
-  }
+  // interface StudioSignupFormData {
+  //   businessName: string;
+  //   contactName: string;
+  //   email: string;
+  //   phone: string;
+  //   location: string;
+  //   bookingSoftware: string;
+  //   message: string;
+  //   token: string;
+  // }
 
   interface StudioSignupFormMsg {
     type: "ok" | "err";
