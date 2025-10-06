@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { JSX } from "react";
 
 export default function AboutPage(): JSX.Element {
   return (
