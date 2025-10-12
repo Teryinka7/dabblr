@@ -1,15 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { Menu as MenuIcon, X as XIcon } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Menu, X } from "lucide-react";
 
 export default function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
-  // Lock body scroll when drawer is open
+  const handleSignupClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const customEvent = new CustomEvent("open-signup-modal");
+    window.dispatchEvent(customEvent);
+    setOpen(false); // close mobile drawer if open
+  };
+
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
     return () => {
@@ -21,13 +27,6 @@ export default function SiteHeader() {
     pathname === href || (href !== "/" && pathname?.startsWith(href))
       ? "text-teal-700"
       : "";
-
-  const openSignupModal = () => {
-    // Dispatch global event that your landing page popup listens for
-    if (typeof window !== "undefined") {
-      window.dispatchEvent(new CustomEvent("open-signup"));
-    }
-  };
 
   return (
     <header className="sticky top-0 z-50 bg-white border-b">
@@ -42,7 +41,7 @@ export default function SiteHeader() {
             Dabble
           </Link>
 
-          {/* Desktop */}
+          {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-700">
             <Link href="/#explore" className="hover:text-teal-600 transition-colors">Explore</Link>
             <Link href="/#membership" className="hover:text-teal-600 transition-colors">Membership</Link>
@@ -52,19 +51,19 @@ export default function SiteHeader() {
 
           <div className="flex items-center gap-3">
             <button
-              onClick={openSignupModal}
-              className="hidden sm:inline-block bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700 text-sm font-medium transition-colors"
+              onClick={handleSignupClick}
+              className="hidden sm:inline-block bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md px-4 py-2 transition-colors"
             >
-              Sign up
+              Sign Up
             </button>
 
-            {/* Mobile toggle */}
+            {/* Mobile menu toggle */}
             <button
               aria-label="Open menu"
               className="md:hidden p-2 rounded-md -mr-2"
               onClick={() => setOpen(true)}
             >
-              <MenuIcon className="h-6 w-6 text-gray-800" />
+              <Menu className="h-6 w-6 text-gray-800" />
             </button>
           </div>
         </div>
@@ -91,24 +90,19 @@ export default function SiteHeader() {
                 aria-label="Close menu"
                 onClick={() => setOpen(false)}
               >
-                <XIcon className="w-5 h-5" />
+                <X className="w-5 h-5" />
               </button>
             </div>
-
-            <nav className="mt-8 space-y-4 text-lg font-medium text-gray-900">
-              <Link href="/#explore" onClick={() => setOpen(false)} className="block px-3 py-2 rounded hover:bg-gray-100">Explore Classes</Link>
-              <Link href="/#membership" onClick={() => setOpen(false)} className="block px-3 py-2 rounded hover:bg-gray-100">Membership</Link>
-              <Link href="/about" onClick={() => setOpen(false)} className="block px-3 py-2 rounded hover:bg-gray-100">About</Link>
-              <Link href="/join-studio" onClick={() => setOpen(false)} className="block px-3 py-2 rounded hover:bg-gray-100">For Studios</Link>
+            <nav className="mt-8 space-y-2">
+              <Link href="/#explore" onClick={() => setOpen(false)} className="block px-3 py-2 rounded text-lg hover:bg-gray-100">Explore</Link>
+              <Link href="/#membership" onClick={() => setOpen(false)} className="block px-3 py-2 rounded text-lg hover:bg-gray-100">Membership</Link>
+              <Link href="/about" onClick={() => setOpen(false)} className="block px-3 py-2 rounded text-lg hover:bg-gray-100">About</Link>
+              <Link href="/join-studio" onClick={() => setOpen(false)} className="block px-3 py-2 rounded text-lg hover:bg-gray-100">For Studios</Link>
             </nav>
-
             <div className="mt-auto pt-4 border-t">
               <button
-                onClick={() => {
-                  setOpen(false);
-                  openSignupModal();
-                }}
-                className="inline-flex w-full items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-blue-700 transition-colors"
+                onClick={handleSignupClick}
+                className="inline-flex w-full items-center justify-center rounded-md bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm font-medium shadow"
               >
                 Sign Up
               </button>
