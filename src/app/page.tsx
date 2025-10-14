@@ -184,7 +184,7 @@ export default function Dabble() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  // Lock background scroll when drawer / signup / details are open
+  // Lock background scroll when the mobile drawer, signup modal, or details modal is open
   useEffect(() => {
     const anyOpen = mobileOpen || showPopup || detailsModal.open;
 
@@ -192,8 +192,8 @@ export default function Dabble() {
     const html = document.documentElement;
 
     if (anyOpen) {
-      body.style.overflow = "hidden";
-      (html.style as any).overscrollBehaviorY = "contain";
+      body.style.overflow = "hidden";               // stop body/page scroll
+      (html.style as any).overscrollBehaviorY = "contain"; // reduce iOS rubber-band
     } else {
       body.style.overflow = "";
       (html.style as any).overscrollBehaviorY = "";
@@ -429,20 +429,31 @@ export default function Dabble() {
       {/* DETAILS MODAL */}
       {detailsModal.open && detailsModal.item && detailsModal.accent && (
         <div
-          className="fixed inset-0 backdrop-blur-md bg-black/40 flex justify-center items-center z-[400] p-4 overscroll-none"
+          className="fixed inset-0 backdrop-blur-md bg-black/40 flex justify-center items-center z-[400] p-4"
           onClick={closeDetails}
         >
           <div
-            className="rounded-2xl shadow-xl max-w-4xl w-full overflow-hidden flex flex-col md:flex-row max-h-[90vh]"
+            className="rounded-2xl shadow-xl max-w-4xl w-full overflow-hidden flex flex-col md:flex-row h-[85vh] md:h-auto md:max-h-[90vh]"
             onClick={(e) => e.stopPropagation()}
             style={{ backgroundColor: detailsModal.accent.bg }}
           >
-            <div className="w-full md:w-2/5 relative min-h-[250px] md:min-h-0">
-              <Image src={detailsModal.item.image} alt={detailsModal.item.title} fill style={{ objectFit: "cover" }} sizes="(max-width: 768px) 100vw, 40vw" priority />
+            {/* Top image (mobile) / left image (md+) */}
+            <div className="w-full md:w-2/5 relative min-h-[220px] md:min-h-0">
+              <Image
+                src={detailsModal.item.image}
+                alt={detailsModal.item.title}
+                fill
+                style={{ objectFit: "cover" }}
+                sizes="(max-width: 768px) 100vw, 40vw"
+                priority
+              />
             </div>
-            <div className="w-full md:w-3/5 flex flex-col">
+
+            {/* Right column */}
+            <div className="w-full md:w-3/5 flex flex-col min-h-0">
+              {/* Scrollable content */}
               <div
-                className="p-6 md:p-8 overflow-y-auto overscroll-contain space-y-6 flex-grow"
+                className="p-6 md:p-8 flex-1 min-h-0 overflow-y-auto overscroll-contain space-y-6"
                 style={{ WebkitOverflowScrolling: "touch" }}
               >
                 <div className="flex items-start justify-between gap-4">
@@ -454,6 +465,7 @@ export default function Dabble() {
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/></svg>
                   </button>
                 </div>
+
                 <div className="grid grid-cols-3 gap-4 text-center border-t border-b py-4" style={{ borderColor: `${detailsModal.accent.accent}40` }}>
                   {[
                     { icon: <UsersIcon className="h-5 w-5 mx-auto" />, label: "Class Size", value: detailsModal.item.meta.size },
@@ -467,7 +479,9 @@ export default function Dabble() {
                     </div>
                   ))}
                 </div>
+
                 <p className="text-gray-800 leading-relaxed">{detailsModal.item.long}</p>
+
                 <div>
                   <h4 className="font-semibold text-lg" style={{ color: detailsModal.accent.accent }}>Your Instructor</h4>
                   <div className="mt-2 p-4 rounded-lg" style={{ backgroundColor: `${detailsModal.accent.accent}1A` }}>
@@ -475,6 +489,7 @@ export default function Dabble() {
                     <p className="text-gray-700 text-sm mt-1">{detailsModal.item.instructor.bio}</p>
                   </div>
                 </div>
+
                 <div>
                   <h4 className="font-semibold text-lg" style={{ color: detailsModal.accent.accent }}>Good to know</h4>
                   <div className="grid sm:grid-cols-3 gap-4 text-sm mt-2">
@@ -484,6 +499,8 @@ export default function Dabble() {
                   </div>
                 </div>
               </div>
+
+              {/* Sticky footer inside modal (non-scrollable) */}
               <div className="p-6 md:px-8 border-t flex flex-col sm:flex-row gap-3" style={{ borderColor: `${detailsModal.accent.accent}40` }}>
                 <Button onClick={() => { setShowPopup(true); closeDetails(); }} className="w-full text-white shadow hover:opacity-95" style={{ backgroundColor: detailsModal.accent.accent }}>Join & Book</Button>
                 <Button variant="outline" className="w-full bg-white" style={{ borderColor: detailsModal.accent.accent, color: detailsModal.accent.accent }} onClick={closeDetails}>Keep Browsing</Button>
