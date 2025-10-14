@@ -171,7 +171,7 @@ export default function Dabble() {
   const openSignup = () => setShowPopup(true);
   const closeSignup = () => setShowPopup(false);
 
-  // Close with ESC and lock body scroll while mobile menu is open
+  // Close with ESC
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -183,10 +183,27 @@ export default function Dabble() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
+
+  // Lock background scroll when drawer / signup / details are open
   useEffect(() => {
-    document.body.style.overflow = mobileOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
-  }, [mobileOpen]);
+    const anyOpen = mobileOpen || showPopup || detailsModal.open;
+
+    const body = document.body;
+    const html = document.documentElement;
+
+    if (anyOpen) {
+      body.style.overflow = "hidden";
+      (html.style as any).overscrollBehaviorY = "contain";
+    } else {
+      body.style.overflow = "";
+      (html.style as any).overscrollBehaviorY = "";
+    }
+
+    return () => {
+      body.style.overflow = "";
+      (html.style as any).overscrollBehaviorY = "";
+    };
+  }, [mobileOpen, showPopup, detailsModal.open]);
 
   const cardData: CardItem[] = [
     {
@@ -331,7 +348,7 @@ export default function Dabble() {
       )}
 
       {/* HERO SECTION */}
-      <section className="relative min-h-[calc(100vh-4rem)]"> {/* Note: Changed from <header> to <section> for semantics */}
+      <section className="relative min-h-[calc(100vh-4rem)]">
         <div className="absolute inset-0 w-full h-full bg-cover bg-center" style={{ backgroundImage: "url('/background_arts.jpg')" }} />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent" />
         <div className="relative z-10 w-full h-full min-h-[calc(100vh-4rem)] flex flex-col items-center justify-center px-4 text-center">
@@ -411,13 +428,23 @@ export default function Dabble() {
 
       {/* DETAILS MODAL */}
       {detailsModal.open && detailsModal.item && detailsModal.accent && (
-        <div className="fixed inset-0 backdrop-blur-md bg-black/40 flex justify-center items-center z-[400] p-4" onClick={closeDetails}>
-          <div className="rounded-2xl shadow-xl max-w-4xl w-full overflow-hidden flex flex-col md:flex-row max-h-[90vh]" onClick={(e) => e.stopPropagation()} style={{ backgroundColor: detailsModal.accent.bg }}>
+        <div
+          className="fixed inset-0 backdrop-blur-md bg-black/40 flex justify-center items-center z-[400] p-4 overscroll-none"
+          onClick={closeDetails}
+        >
+          <div
+            className="rounded-2xl shadow-xl max-w-4xl w-full overflow-hidden flex flex-col md:flex-row max-h-[90vh]"
+            onClick={(e) => e.stopPropagation()}
+            style={{ backgroundColor: detailsModal.accent.bg }}
+          >
             <div className="w-full md:w-2/5 relative min-h-[250px] md:min-h-0">
               <Image src={detailsModal.item.image} alt={detailsModal.item.title} fill style={{ objectFit: "cover" }} sizes="(max-width: 768px) 100vw, 40vw" priority />
             </div>
             <div className="w-full md:w-3/5 flex flex-col">
-              <div className="p-6 md:p-8 overflow-y-auto space-y-6 flex-grow">
+              <div
+                className="p-6 md:p-8 overflow-y-auto overscroll-contain space-y-6 flex-grow"
+                style={{ WebkitOverflowScrolling: "touch" }}
+              >
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <h3 className="text-2xl font-bold" style={{ color: detailsModal.accent.accent }}>{detailsModal.item.title}</h3>
