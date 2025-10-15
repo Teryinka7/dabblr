@@ -22,7 +22,7 @@ export default function SiteHeader() {
   const handleSignupClick = (e?: React.MouseEvent) => {
     e?.preventDefault();
     // Call the global opener set by layout (most reliable), then also dispatch event as a fallback
-    (window as any).__openSignupModal?.();
+    (window as Window & { __openSignupModal?: () => void }).__openSignupModal?.();
     window.dispatchEvent(new Event("open-signup"));
     setOpen(false);
   };

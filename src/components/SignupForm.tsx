@@ -3,7 +3,6 @@
 import { useState } from "react";
 
 export default function SignupForm({
-  layout = "modal",
   brandPrimary = "#2563eb", // Default to Tailwind's blue-600
   brandPrimaryHover = "#1d4ed8", // Default to Tailwind's blue-700
   onSuccess = () => {},

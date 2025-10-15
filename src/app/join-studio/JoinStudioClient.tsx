@@ -17,12 +17,7 @@ declare global {
 const TURNSTILE_SITE_KEY =
   process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "YOUR_TURNSTILE_SITE_KEY";
 
-type StudioSignupFormProps = {
-  brandPrimary: string;
-  brandPrimaryHover: string;
-};
-
-function StudioSignupForm({ brandPrimary, brandPrimaryHover }: StudioSignupFormProps) {
+function StudioSignupForm() {
   const formRef = useRef<HTMLFormElement>(null);
   const [submitting, setSubmitting] = useState(false);
   const [msg, setMsg] = useState<{ type: "ok" | "err"; text: string } | null>(null);
@@ -39,11 +34,6 @@ function StudioSignupForm({ brandPrimary, brandPrimaryHover }: StudioSignupFormP
     const el = formRef.current?.querySelector('input[name="cf-turnstile-response"]') as HTMLInputElement | null;
     return el?.value || "";
   };
-
-  interface StudioSignupFormMsg {
-    type: "ok" | "err";
-    text: string;
-  }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
@@ -181,7 +171,6 @@ const FAQItem = ({ question, answer, brandPrimary }: FAQItemProps) => {
 
 export default function JoinStudioClient() {
   const brandPrimary = "#2F7A80";
-  const brandPrimaryHover = "#2A6C71";
   const heroBg = "/background_arts.jpg";
 
   const benefitsData = [
@@ -262,7 +251,7 @@ export default function JoinStudioClient() {
                 Complete this short form and we will contact you to help get your first listings live.
               </p>
             </div>
-            <StudioSignupForm brandPrimary={brandPrimary} brandPrimaryHover={brandPrimaryHover} />
+            <StudioSignupForm />
           </div>
         </section>
 
