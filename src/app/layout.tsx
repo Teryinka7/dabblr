@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Geist, Geist_Mono, Poppins } from "next/font/google";
 import Script from "next/script";                           // 👈 add this
 import { usePathname, useSearchParams } from "next/navigation"; // 👈 for SPA page views
+// @ts-ignore: CSS module declaration missing — side-effect import for global stylesheet
 import "./globals.css";
 import ClientHeaderWrapper from "@/components/ClientHeaderWrapper";
 import SignupModal from "@/components/SignupModal";

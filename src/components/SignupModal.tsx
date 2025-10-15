@@ -3,22 +3,33 @@
 import { useEffect, useState } from "react";
 import SignupForm from "@/components/SignupForm";
 
-export default function SignupModal() {
-  const [isOpen, setIsOpen] = useState(false); // default should be false
+export default function SignupModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const [isOpen, setIsOpen] = useState(false);
 
+  // Sync with parent prop
+  useEffect(() => {
+    setIsOpen(open);
+  }, [open]);
+
+  // Listen for global event
   useEffect(() => {
     const handler = () => setIsOpen(true);
-    window.addEventListener("open-signup-modal", handler);
-    return () => window.removeEventListener("open-signup-modal", handler);
+    window.addEventListener("open-signup", handler);
+    return () => window.removeEventListener("open-signup", handler);
   }, []);
 
-  if (!isOpen) return null; // don’t show unless opened manually
+  const handleClose = () => {
+    setIsOpen(false);
+    onClose();
+  };
+
+  if (!isOpen) return null;
 
   return (
     <div
       id="beta-modal"
       className="fixed inset-0 backdrop-blur-md bg-black/40 flex justify-center items-center z-[400] p-4"
-      onClick={() => setIsOpen(false)}
+      onClick={handleClose}
       role="dialog"
       aria-modal="true"
     >
@@ -27,7 +38,7 @@ export default function SignupModal() {
         onClick={(e) => e.stopPropagation()}
       >
         <button
-          onClick={() => setIsOpen(false)}
+          onClick={handleClose}
           className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors rounded-full w-8 h-8 flex items-center justify-center bg-gray-50 hover:bg-gray-100"
           aria-label="Close signup"
         >
@@ -37,7 +48,7 @@ export default function SignupModal() {
         </button>
         <h2 className="text-3xl font-bold mb-3 text-[#215D59]">Join Our Beta</h2>
         <p className="text-gray-700 mb-6 text-lg">Be the first to access early classes and exclusive offers.</p>
-        <SignupForm layout="modal" brandPrimary="#215D59" brandPrimaryHover="#1A4B47" onSuccess={() => {}} />
+        <SignupForm layout="modal" brandPrimary="#215D59" brandPrimaryHover="#1A4B47" onSuccess={handleClose} />
       </div>
     </div>
   );

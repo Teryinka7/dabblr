@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState, type SVGProps } from "react";
-import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import Script from "next/script";
@@ -35,13 +34,13 @@ const Brand = () => (
 );
 
 const UsersIcon = (props: SVGProps<SVGSVGElement>) => (
-  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>
 );
 const BarChartIcon = (props: SVGProps<SVGSVGElement>) => (
-  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" x2="12" y1="20" y2="10"/><line x1="18" x2="18" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="16"/></svg>
+  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" x2="12" y1="20" y2="10" /><line x1="18" x2="18" y1="20" y2="4" /><line x1="6" x2="6" y1="20" y2="16" /></svg>
 );
 const ClockIcon = (props: SVGProps<SVGSVGElement>) => (
-  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
 );
 
 // Types
@@ -168,42 +167,59 @@ export default function Dabble() {
   const brandPrimary = accents[1].accent;
   const brandPrimaryHover = "#2A6C71";
 
-  const openSignup = () => setShowPopup(true);
-  const closeSignup = () => setShowPopup(false);
+  const openSignup = () => {
+    setShowPopup(true);
+    window.dispatchEvent(new Event("open-signup"));
+  };
 
-  // Close with ESC
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setShowPopup(false);
-        setDetailsModal({ open: false, item: null, accent: null });
-        setMobileOpen(false);
-      }
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, []);
+// Replace the scroll lock useEffect with this corrected version:
+useEffect(() => {
+  const anyOpen = mobileOpen || showPopup || detailsModal.open;
 
-  // Lock background scroll when the mobile drawer, signup modal, or details modal is open
-  useEffect(() => {
-    const anyOpen = mobileOpen || showPopup || detailsModal.open;
-
-    const body = document.body;
-    const html = document.documentElement;
-
-    if (anyOpen) {
-      body.style.overflow = "hidden";               // stop body/page scroll
-      (html.style as any).overscrollBehaviorY = "contain"; // reduce iOS rubber-band
-    } else {
-      body.style.overflow = "";
-      (html.style as any).overscrollBehaviorY = "";
+  if (anyOpen) {
+    // Get scrollbar width to prevent layout shift
+    const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+    
+    // Save current scroll position
+    const scrollY = window.scrollY;
+    
+    // Lock scroll
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = '100%';
+    document.body.style.paddingRight = `${scrollBarWidth}px`;
+  } else {
+    // Get the scroll position before unlocking
+    const scrollY = document.body.style.top;
+    
+    // Unlock scroll
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+    document.body.style.paddingRight = '';
+    
+    // Restore scroll position (remove 'px' and negate the value)
+    if (scrollY) {
+      const scrollPosition = Math.abs(parseInt(scrollY));
+      window.scrollTo(0, scrollPosition);
     }
+  }
 
-    return () => {
-      body.style.overflow = "";
-      (html.style as any).overscrollBehaviorY = "";
-    };
-  }, [mobileOpen, showPopup, detailsModal.open]);
+  // Cleanup
+  return () => {
+    const scrollY = document.body.style.top;
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+    document.body.style.paddingRight = '';
+    
+    // Restore scroll position in cleanup too
+    if (scrollY) {
+      const scrollPosition = Math.abs(parseInt(scrollY));
+      window.scrollTo(0, scrollPosition);
+    }
+  };
+}, [mobileOpen, showPopup, detailsModal.open]);
 
   const cardData: CardItem[] = [
     {
@@ -279,46 +295,42 @@ export default function Dabble() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white via-slate-50 to-pink-50 text-gray-900 font-poppins">
-      <Head>
-        <title>Dabble: Your Membership for Real-World Classes in London</title>
-      </Head>
 
       <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer />
-
       {/* ========== SINGLE STICKY HEADER (REVISED) ========== */}
       <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-200">
         <div className="max-w-6xl mx-auto px-6">
-            <div className="flex justify-between items-center h-16">
-                <Link href="/" aria-label="Dabble Home">
-                    <Brand />
-                </Link>
+          <div className="flex justify-between items-center h-16">
+            <Link href="/" aria-label="Dabble Home">
+              <Brand />
+            </Link>
 
-                {/* Desktop Nav */}
-                <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-700">
-                    <button onClick={() => scrollTo("explore")} className="hover:text-teal-600 transition-colors">Explore</button>
-                    <button onClick={() => scrollTo("membership")} className="hover:text-teal-600 transition-colors">Membership</button>
-                    <Link href="/about" className="hover:text-teal-600 transition-colors">About</Link>
-                    <Link href="/join-studio" className="hover:text-teal-600 transition-colors">For Studios</Link>
-                </nav>
+            {/* Desktop Nav */}
+            <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-700">
+              <button onClick={() => scrollTo("explore")} className="hover:text-teal-600 transition-colors">Explore</button>
+              <button onClick={() => scrollTo("membership")} className="hover:text-teal-600 transition-colors">Membership</button>
+              <Link href="/about" className="hover:text-teal-600 transition-colors">About</Link>
+              <Link href="/join-studio" className="hover:text-teal-600 transition-colors">For Studios</Link>
+            </nav>
 
-                <div className="flex items-center gap-4">
-                    {/* Desktop CTA */}
-                    <Button data-open-signup variant="outline" className="hidden md:inline-flex">
-                        Sign Up
-                    </Button>
-                    {/* Mobile Menu Button */}
-                    <button
-                        className="md:hidden p-2 rounded-md -mr-2"
-                        onClick={() => setMobileOpen(true)}
-                        aria-label="Open menu"
-                    >
-                        <MenuIcon className="h-6 w-6 text-gray-800" />
-                    </button>
-                </div>
+            <div className="flex items-center gap-4">
+              {/* Desktop CTA */}
+              <Button onClick={openSignup} variant="outline" className="hidden md:inline-flex">
+                Sign Up
+              </Button>
+              {/* Mobile Menu Button */}
+              <button
+                className="md:hidden p-2 rounded-md -mr-2"
+                onClick={() => setMobileOpen(true)}
+                aria-label="Open menu"
+              >
+                <MenuIcon className="h-6 w-6 text-gray-800" />
+              </button>
             </div>
+          </div>
         </div>
       </header>
-      
+
       {/* MOBILE MENU DRAWER */}
       {mobileOpen && (
         <div className="fixed inset-0 z-[60] md:hidden">
@@ -341,7 +353,7 @@ export default function Dabble() {
               <Link href="/join-studio" onClick={() => setMobileOpen(false)} className="block px-3 py-2 rounded text-lg hover:bg-gray-100">For Studios</Link>
             </nav>
             <div className="mt-auto pt-4 border-t">
-              <Button data-open-signup className="w-full">Sign Up</Button>
+              <Button onClick={openSignup} className="w-full">Sign Up</Button>
             </div>
           </div>
         </div>
@@ -462,7 +474,7 @@ export default function Dabble() {
                     <p className="text-md text-gray-700">{detailsModal.item.details}</p>
                   </div>
                   <button onClick={closeDetails} className="text-gray-500 hover:text-gray-900 transition-colors rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 bg-black/5 hover:bg-black/10" aria-label="Close details">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                   </button>
                 </div>
 
@@ -564,7 +576,7 @@ export default function Dabble() {
                         ))}
                       </ul>
                     </div>
-                    <div className="mt-6"><Button data-open-signup className="w-full text-white shadow hover:opacity-95" style={{ backgroundColor: a.accent }}>Get Started</Button></div>
+                    <div className="mt-6"><Button onClick={openSignup} className="w-full text-white shadow hover:opacity-95" style={{ backgroundColor: a.accent }}>Get Started</Button></div>
                   </div>
                 </div>
               );
