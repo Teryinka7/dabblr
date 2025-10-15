@@ -149,7 +149,6 @@ function SignupForm({
 
 export default function Dabble() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [showPopup, setShowPopup] = useState(false);
   const [detailsModal, setDetailsModal] = useState<{ open: boolean; item: CardItem | null; accent: Accent | null }>({
     open: false,
     item: null,
@@ -168,58 +167,60 @@ export default function Dabble() {
   const brandPrimaryHover = "#2A6C71";
 
   const openSignup = () => {
-    setShowPopup(true);
     window.dispatchEvent(new Event("open-signup"));
   };
 
-// Replace the scroll lock useEffect with this corrected version:
-useEffect(() => {
-  const anyOpen = mobileOpen || showPopup || detailsModal.open;
+  // Close with ESC
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setDetailsModal({ open: false, item: null, accent: null });
+        setMobileOpen(false);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
-  if (anyOpen) {
-    // Get scrollbar width to prevent layout shift
-    const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
-    
-    // Save current scroll position
-    const scrollY = window.scrollY;
-    
-    // Lock scroll
-    document.body.style.position = 'fixed';
-    document.body.style.top = `-${scrollY}px`;
-    document.body.style.width = '100%';
-    document.body.style.paddingRight = `${scrollBarWidth}px`;
-  } else {
-    // Get the scroll position before unlocking
-    const scrollY = document.body.style.top;
-    
-    // Unlock scroll
-    document.body.style.position = '';
-    document.body.style.top = '';
-    document.body.style.width = '';
-    document.body.style.paddingRight = '';
-    
-    // Restore scroll position (remove 'px' and negate the value)
-    if (scrollY) {
-      const scrollPosition = Math.abs(parseInt(scrollY));
-      window.scrollTo(0, scrollPosition);
-    }
-  }
+  // Lock background scroll when the mobile drawer or details modal is open
+  useEffect(() => {
+    const anyOpen = mobileOpen || detailsModal.open;
 
-  // Cleanup
-  return () => {
-    const scrollY = document.body.style.top;
-    document.body.style.position = '';
-    document.body.style.top = '';
-    document.body.style.width = '';
-    document.body.style.paddingRight = '';
-    
-    // Restore scroll position in cleanup too
-    if (scrollY) {
-      const scrollPosition = Math.abs(parseInt(scrollY));
-      window.scrollTo(0, scrollPosition);
+    if (anyOpen) {
+      const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+      const scrollY = window.scrollY;
+      
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+      document.body.style.paddingRight = `${scrollBarWidth}px`;
+    } else {
+      const scrollY = document.body.style.top;
+      
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      document.body.style.paddingRight = '';
+      
+      if (scrollY) {
+        const scrollPosition = Math.abs(parseInt(scrollY));
+        window.scrollTo(0, scrollPosition);
+      }
     }
-  };
-}, [mobileOpen, showPopup, detailsModal.open]);
+
+    return () => {
+      const scrollY = document.body.style.top;
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      document.body.style.paddingRight = '';
+      
+      if (scrollY) {
+        const scrollPosition = Math.abs(parseInt(scrollY));
+        window.scrollTo(0, scrollPosition);
+      }
+    };
+  }, [mobileOpen, detailsModal.open]);
 
   const cardData: CardItem[] = [
     {
@@ -270,7 +271,7 @@ useEffect(() => {
       long: "Hands-on taster on the wheel. Learn centering, pulling walls and simple shaping. Ideal first try at wheel throwing; pieces can be trimmed and fired (optional).",
       meta: { size: "Up to 8 people", level: "Beginner", duration: "2 hours" },
       instructor: { name: "Jess H.", bio: "Studio owner and ceramicist; specialises in functional stoneware and relaxed, step-by-step teaching." },
-      extras: { location: "Camberwell Clay Studio", bring: "Clothes you don’t mind getting clay on", included: "Clay, tools, aprons; firing available for a small fee" },
+      extras: { location: "Camberwell Clay Studio", bring: "Clothes you don't mind getting clay on", included: "Clay, tools, aprons; firing available for a small fee" },
     },
     {
       title: "Vietnamese Street Food – Lewisham",
@@ -297,7 +298,8 @@ useEffect(() => {
     <div className="min-h-screen bg-gradient-to-b from-white via-slate-50 to-pink-50 text-gray-900 font-poppins">
 
       <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer />
-      {/* ========== SINGLE STICKY HEADER (REVISED) ========== */}
+      
+      {/* ========== SINGLE STICKY HEADER ========== */}
       <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-200">
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex justify-between items-center h-16">
@@ -314,11 +316,9 @@ useEffect(() => {
             </nav>
 
             <div className="flex items-center gap-4">
-              {/* Desktop CTA */}
               <Button onClick={openSignup} variant="outline" className="hidden md:inline-flex">
                 Sign Up
               </Button>
-              {/* Mobile Menu Button */}
               <button
                 className="md:hidden p-2 rounded-md -mr-2"
                 onClick={() => setMobileOpen(true)}
@@ -449,7 +449,6 @@ useEffect(() => {
             onClick={(e) => e.stopPropagation()}
             style={{ backgroundColor: detailsModal.accent.bg }}
           >
-            {/* Top image (mobile) / left image (md+) */}
             <div className="w-full md:w-2/5 relative min-h-[220px] md:min-h-0">
               <Image
                 src={detailsModal.item.image}
@@ -461,9 +460,7 @@ useEffect(() => {
               />
             </div>
 
-            {/* Right column */}
             <div className="w-full md:w-3/5 flex flex-col min-h-0">
-              {/* Scrollable content */}
               <div
                 className="p-6 md:p-8 flex-1 min-h-0 overflow-y-auto overscroll-contain space-y-6"
                 style={{ WebkitOverflowScrolling: "touch" }}
@@ -512,9 +509,8 @@ useEffect(() => {
                 </div>
               </div>
 
-              {/* Sticky footer inside modal (non-scrollable) */}
               <div className="p-6 md:px-8 border-t flex flex-col sm:flex-row gap-3" style={{ borderColor: `${detailsModal.accent.accent}40` }}>
-                <Button onClick={() => { setShowPopup(true); closeDetails(); }} className="w-full text-white shadow hover:opacity-95" style={{ backgroundColor: detailsModal.accent.accent }}>Join & Book</Button>
+                <Button onClick={() => { openSignup(); closeDetails(); }} className="w-full text-white shadow hover:opacity-95" style={{ backgroundColor: detailsModal.accent.accent }}>Join & Book</Button>
                 <Button variant="outline" className="w-full bg-white" style={{ borderColor: detailsModal.accent.accent, color: detailsModal.accent.accent }} onClick={closeDetails}>Keep Browsing</Button>
               </div>
             </div>

@@ -18,6 +18,44 @@ export default function SignupModal({ open, onClose }: { open: boolean; onClose:
     return () => window.removeEventListener("open-signup", handler);
   }, []);
 
+  // Handle scroll lock when modal opens/closes
+  useEffect(() => {
+    if (isOpen) {
+      const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+      const scrollY = window.scrollY;
+      
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+      document.body.style.paddingRight = `${scrollBarWidth}px`;
+    } else {
+      const scrollY = document.body.style.top;
+      
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      document.body.style.paddingRight = '';
+      
+      if (scrollY) {
+        const scrollPosition = Math.abs(parseInt(scrollY));
+        window.scrollTo(0, scrollPosition);
+      }
+    }
+
+    return () => {
+      const scrollY = document.body.style.top;
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      document.body.style.paddingRight = '';
+      
+      if (scrollY) {
+        const scrollPosition = Math.abs(parseInt(scrollY));
+        window.scrollTo(0, scrollPosition);
+      }
+    };
+  }, [isOpen]);
+
   const handleClose = () => {
     setIsOpen(false);
     onClose();
