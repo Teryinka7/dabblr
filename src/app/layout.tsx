@@ -12,9 +12,14 @@ import SignupModal from "@/components/SignupModal";
 
 // Optional: type the global
 declare global {
-  interface Window { gtag?: (...args: Array<any>) => void }
+  interface Window { 
+    gtag?: (
+      command: 'config' | 'event' | 'js' | 'set',
+      targetId: string,
+      config?: Record<string, unknown>
+    ) => void;
+  }
 }
-
 const GA_ID = "G-M7WLH6S0D4"; // or process.env.NEXT_PUBLIC_GA_ID
 
 const geistSans = Geist({ subsets: ["latin"], variable: "--font-geist-sans" });
