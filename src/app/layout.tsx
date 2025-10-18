@@ -61,7 +61,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         <footer className="border-t mt-12">
           <div className="max-w-6xl mx-auto px-6 py-8 text-sm text-gray-600 flex flex-col md:flex-row items-center justify-between gap-4">
-            <p>© {new Date().getFullYear()} Dabble</p>
+            <p>© {new Date().getFullYear()} Dabblr</p>
             <div className="flex gap-4">
               <Link href="/about" className="hover:text-gray-900">About</Link>
               <Link href="/#signup" className="hover:text-gray-900">Get updates</Link>

@@ -29,7 +29,7 @@ const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "";
 // Brand wordmark
 const Brand = () => (
   <span className="text-2xl font-semibold tracking-tight text-gray-900" style={{ fontFamily: "'Poppins', sans-serif" }}>
-    Dabble
+    Dabblr
   </span>
 );
 
@@ -303,7 +303,7 @@ export default function Dabble() {
       <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-200">
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex justify-between items-center h-16">
-            <Link href="/" aria-label="Dabble Home">
+            <Link href="/" aria-label="Dabblr Home">
               <Brand />
             </Link>
 
@@ -337,7 +337,7 @@ export default function Dabble() {
           <div className="absolute inset-0 bg-black/50" onClick={() => setMobileOpen(false)} aria-hidden="true" />
           <div className="absolute top-0 right-0 h-full w-80 max-w-[85%] bg-white shadow-xl p-6 flex flex-col">
             <div className="flex items-center justify-between">
-              <span className="text-2xl font-semibold tracking-tight text-gray-900" style={{ fontFamily: "'Poppins', sans-serif" }}>Dabble</span>
+              <span className="text-2xl font-semibold tracking-tight text-gray-900" style={{ fontFamily: "'Poppins', sans-serif" }}>Dabblr</span>
               <button
                 className="rounded-full w-9 h-9 inline-flex items-center justify-center bg-gray-100 hover:bg-gray-200"
                 aria-label="Close menu"
@@ -588,7 +588,7 @@ export default function Dabble() {
             <div className="md:col-span-2"><h3 className="text-xl font-semibold">Ready to start dabbling?</h3><p className="mt-2 text-gray-600">Sign up for our beta to be the first to know when we launch.</p></div>
             <div className="md:col-span-2"><SignupForm layout="inline" brandPrimary={brandPrimary} brandPrimaryHover={brandPrimaryHover} /></div>
           </div>
-          <div className="mt-10 border-t pt-8 text-center text-sm text-gray-500"><p>© {new Date().getFullYear()} Dabble Inc. All rights reserved.</p></div>
+          <div className="mt-10 border-t pt-8 text-center text-sm text-gray-500"><p>© {new Date().getFullYear()} Dabblr Inc. All rights reserved.</p></div>
         </div>
       </footer>
     </div>

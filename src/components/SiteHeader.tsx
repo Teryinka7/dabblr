@@ -33,11 +33,11 @@ export default function SiteHeader() {
         <div className="flex justify-between items-center h-16">
           <Link
             href="/"
-            aria-label="Dabble Home"
+            aria-label="Dabblr Home"
             className="text-2xl font-semibold tracking-tight text-gray-900"
             style={{ fontFamily: "'Poppins', sans-serif" }}
           >
-            Dabble
+            Dabblr
           </Link>
 
           {/* Desktop nav */}
@@ -84,7 +84,7 @@ export default function SiteHeader() {
                 className="text-2xl font-semibold tracking-tight text-gray-900"
                 style={{ fontFamily: "'Poppins', sans-serif" }}
               >
-                Dabble
+                Dabblr
               </span>
               <button
                 className="rounded-full w-9 h-9 inline-flex items-center justify-center bg-gray-100 hover:bg-gray-200"
