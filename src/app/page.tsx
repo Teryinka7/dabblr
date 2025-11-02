@@ -231,7 +231,7 @@ export default function Dabble() {
       long: "Get creative this festive season and design your own hand-printed Christmas cards and gift tags! In this workshop, you’ll learn the basics of linocut printing, from designing a simple festive motif to safely carving your block and printing it onto beautiful card and paper. Whether you’re a beginner or have tried linoprinting before, this session is a chance to experiment, relax, and take home a set of unique handmade prints perfect for gifting.",
       meta: { size: "Medium", level: "Open to all", duration: "2 hrs" },
       instructor: { name: "Lynn.", bio: "Lynn has 20 years of experience of working in education as an art  teacher and as a lecturer.  Lynn has  taught art extensively in London schools and collaborated with a vast range of artists, art organisations and galleries." },
-      extras: { location: "The Castle, 280 Crystal Palace Rd, London SE22 9JJ", bring: "Good mood", included: "Art supplies, protective clothing" },
+      extras: { location: "The Castle, 280 Crystal Palace Rd, London SE22 9JJ", bring: "Good mood", included: "Art supplies" },
     },
     {
       title: "WINTRY LANDSCAPES – the Castle in Dulwich",
@@ -241,7 +241,7 @@ export default function Dabble() {
       long: "Whether you’re returning to build on your collection or joining us for the very first time, this workshop is the perfect creative escape! Inspired by the bold textures and dramatic contrasts of David Barnes, we’ll be creating expressive wintry landscapes in acrylics. You’ll explore palette knife techniques, layering, and colour blending to capture the atmosphere of rolling hills, striking skies, and rustic rural scenes.",
       meta: { size: "Medium", level: "Beginner-friendly", duration: "2 hrs" },
       instructor: { name: "Lynn.", bio: "Lynn has 20 years of experience of working in education as an art  teacher and as a lecturer.  Lynn has  taught art extensively in London schools and collaborated with a vast range of artists, art organisations and galleries." },
-      extras: { location: "The Castle, 280 Crystal Palace Rd, London SE22 9JJ", bring: "Good mood", included: "Art supplies, protective clothing" },
+      extras: { location: "The Castle, 280 Crystal Palace Rd, London SE22 9JJ", bring: "Good mood", included: "Art supplies" },
     },
     {
       title: "MONOPRINTS & WATERCOLOURS – the Castle in Dulwich",
@@ -251,7 +251,7 @@ export default function Dabble() {
       long: "Join us for a relaxing and creative workshop inspired by the stunning nature-based prints of Angela Harding. Using a simple mono printing technique with carbon copy paper, you’ll create beautiful layered prints enhanced with delicate watercolour washes. No drawing skills are required—you can trace your chosen image, making this a perfect workshop for beginners and experienced artists alike.",
       meta: { size: "Medium", level: "Beginner", duration: "2 hours" },
       instructor: { name: "Lynn.", bio: "Lynn has 20 years of experience of working in education as an art  teacher and as a lecturer.  Lynn has  taught art extensively in London schools and collaborated with a vast range of artists, art organisations and galleries." },
-      extras: { location: "The Castle, 280 Crystal Palace Rd, London SE22 9JJ", bring: "Good mood", included: "Art supplies, protective clothing" },
+      extras: { location: "The Castle, 280 Crystal Palace Rd, London SE22 9JJ", bring: "Good mood", included: "Art supplies" },
     },
     {
       title: "Stand-up Improv – London Bridge",
