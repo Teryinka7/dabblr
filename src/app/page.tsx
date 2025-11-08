@@ -309,8 +309,7 @@ export default function Dabble() {
 
             {/* Desktop Nav */}
             <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-700">
-              <button onClick={() => scrollTo("explore")} className="hover:text-teal-600 transition-colors">Explore</button>
-              <button onClick={() => scrollTo("membership")} className="hover:text-teal-600 transition-colors">Membership</button>
+              <button onClick={() => scrollTo("explore")} className="hover:text-teal-600 transition-colors">Explore classes</button>
               <Link href="/about" className="hover:text-teal-600 transition-colors">About</Link>
               <Link href="/join-studio" className="hover:text-teal-600 transition-colors">For Studios</Link>
             </nav>
@@ -348,7 +347,6 @@ export default function Dabble() {
             </div>
             <nav className="mt-8 space-y-2">
               <button onClick={() => scrollTo("explore")} className="block w-full text-left px-3 py-2 rounded text-lg hover:bg-gray-100">Explore Classes</button>
-              <button onClick={() => scrollTo("membership")} className="block w-full text-left px-3 py-2 rounded text-lg hover:bg-gray-100">Membership</button>
               <Link href="/about" onClick={() => setMobileOpen(false)} className="block px-3 py-2 rounded text-lg hover:bg-gray-100">About</Link>
               <Link href="/join-studio" onClick={() => setMobileOpen(false)} className="block px-3 py-2 rounded text-lg hover:bg-gray-100">For Studios</Link>
             </nav>
@@ -370,8 +368,8 @@ export default function Dabble() {
             Try something new in London.
           </h1>
           <p className="text-white/90 text-lg md:text-xl mt-4 max-w-2xl mx-auto drop-shadow-md">
-            One membership for endless creativity. Try pottery, cooking, dance,
-            and more with your monthly included classes.
+            Browse classes near you, try pottery, cooking, dance,
+            and more.
           </p>
 
           <form
@@ -405,36 +403,6 @@ export default function Dabble() {
               onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = brandPrimary)}
             ><SearchIcon className="h-5 w-5 text-white" /></button>
           </form>
-        </div>
-      </section>
-
-      {/* HOW IT WORKS */}
-      <section className="bg-teal-50/50 py-16">
-        <div className="max-w-5xl mx-auto px-6">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold" style={{ color: brandPrimary }}>Your Curiosity, Unboxed</h2>
-            <p className="mt-2 text-lg text-gray-600">A simple membership to unlock your new hobby.</p>
-          </div>
-          <div className="relative mt-12 grid md:grid-cols-3 gap-8">
-            <div className="absolute top-1/2 left-0 w-full h-px bg-gray-300 hidden md:block" />
-            {[
-              { icon: <Package size={32} />, title: "Pick Your Plan", description: "Choose a monthly plan that fits how often you want to get out and try something new." },
-              { icon: <CalendarCheck size={32} />, title: "Book Your Classes", description: "Use your monthly credits to book any class included in your plan. It's all managed in one place." },
-              { icon: <Sparkles size={32} />, title: "Enjoy & Repeat", description: "Show up, meet likeminded people, discover a new hobby. Your credits reset every month." },
-            ].map((step) => (
-              <div key={step.title} className="relative flex flex-col items-center text-center p-6 bg-white rounded-2xl shadow-lg border">
-                <div className="absolute -top-10 flex items-center justify-center h-20 w-20 rounded-full border-4 border-white" style={{ backgroundColor: accents[1].bg }}>
-                  <div className="flex items-center justify-center h-16 w-16 rounded-full text-white" style={{ backgroundColor: brandPrimary }}>
-                    {step.icon}
-                  </div>
-                </div>
-                <div className="mt-10">
-                  <h3 className="text-xl font-semibold text-gray-900">{step.title}</h3>
-                  <p className="text-gray-600 mt-2">{step.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
@@ -521,7 +489,7 @@ export default function Dabble() {
       {/* MAIN CONTENT */}
       <main className="max-w-6xl mx-auto px-6 mt-16 space-y-16">
         <section id="explore">
-          <h2 className="text-2xl font-semibold mb-4" style={{ color: brandPrimary }}>Explore classes</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-center" style={{ color: brandPrimary }}>Explore classes</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {cardData.map((x, i) => {
               const a = accents[i % accents.length];
@@ -546,39 +514,6 @@ export default function Dabble() {
           </div>
         </section>
 
-        <section id="membership">
-          <h2 className="text-3xl font-bold text-center" style={{ color: brandPrimary }}>Choose your membership</h2>
-          <p className="text-center text-gray-600 mt-2">Cancel anytime • No hidden fees</p>
-          <div className="grid md:grid-cols-3 gap-6 mt-8">
-            {[
-              { name: "Dabbler", price: "29", desc: "Perfect for trying something new.", features: ["2 classes per month"] },
-              { name: "Explorer", price: "55", desc: "For the curious — more variety, better value.", features: ["4 classes per month", "Priority booking"], isPopular: true },
-              { name: "Adventurer", price: "99", desc: "For regulars who love to mix it up.", features: ["8+ classes per month", "Priority booking", "Bring-a-friend pass"] },
-            ].map((plan, i) => {
-              const a = accents[i % accents.length];
-              return (
-                <div key={plan.name} className={`relative flex flex-col rounded-2xl overflow-hidden shadow-lg border transition-transform duration-300 hover:scale-105 ${plan.isPopular ? "border-4" : "border-gray-100"}`} style={{ borderColor: plan.isPopular ? a.accent : undefined }}>
-                  {plan.isPopular && <div className="absolute top-4 right-4 bg-white text-xs font-bold py-1 px-3 rounded-full shadow" style={{ color: a.accent }}>Most Popular</div>}
-                  <div className="p-6 text-center text-white" style={{ backgroundColor: a.accent }}><h3 className="text-2xl font-semibold">{plan.name}</h3><p className="text-sm opacity-80">{plan.desc}</p></div>
-                  <div className="p-6 flex flex-col flex-grow text-center" style={{ backgroundColor: a.bg }}>
-                    <div className="flex-grow">
-                      <div className="my-4"><span className="text-5xl font-bold text-gray-900">£{plan.price}</span><span className="text-lg text-gray-600">/month</span></div>
-                      <ul className="space-y-2 text-gray-700">
-                        {plan.features.map((f) => (
-                          <li key={f} className="flex items-center justify-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" style={{ color: a.accent }}><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
-                            {f}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div className="mt-6"><Button onClick={openSignup} className="w-full text-white shadow hover:opacity-95" style={{ backgroundColor: a.accent }}>Get Started</Button></div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </section>
       </main>
 
       {/* FOOTER */}
