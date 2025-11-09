@@ -13,9 +13,6 @@ import {
   CalendarIcon,
   SearchIcon,
   LayoutGridIcon,
-  Package,
-  CalendarCheck,
-  Sparkles,
 } from "lucide-react";
 
 declare global {

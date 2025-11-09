@@ -12,7 +12,7 @@ export default function AboutPage(): JSX.Element {
           <h1 className="text-5xl font-bold text-blue-700 mb-4 cursor-pointer hover:underline">Dabblr</h1>
         </Link>
         <p className="text-lg max-w-3xl mx-auto text-gray-700">
-          Dabblr helps curious Londoners explore new hobbies and activities — from pottery to improv — through a simple, flexible membership.
+          Dabblr helps curious Londoners explore new hobbies and activities — from pottery to improv.
         </p>
       </section>
 

@@ -43,7 +43,6 @@ export default function SiteHeader() {
           {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
             <Link href="/#explore" className="hover:text-teal-600 text-gray-800 transition-colors">Explore</Link>
-            <Link href="/#membership" className="hover:text-teal-600 text-gray-800 transition-colors">Membership</Link>
             <Link href="/about" className={`hover:text-teal-600 transition-colors ${isActive("/about") ? "text-teal-700" : "text-gray-800"}`}>About</Link>
             <Link href="/join-studio" className={`hover:text-teal-600 transition-colors ${isActive("/join-studio") ? "text-teal-700" : "text-gray-800"}`}>For Studios</Link>
           </nav>
