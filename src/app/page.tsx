@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type SVGProps } from "react";
+import { useEffect, useState, type SVGProps } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Script from "next/script";
@@ -14,14 +14,6 @@ import {
   SearchIcon,
   LayoutGridIcon,
 } from "lucide-react";
-
-declare global {
-  interface Window {
-    turnstile?: { reset?: (el: Element) => void };
-  }
-}
-
-const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "";
 
 // Brand wordmark
 const Brand = () => (
@@ -302,8 +294,6 @@ export default function Dabble() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white via-slate-50 to-pink-50 text-gray-900 font-poppins">
-
-      <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer />
       
       {/* ========== SINGLE STICKY HEADER ========== */}
       <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-200">
