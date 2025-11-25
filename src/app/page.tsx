@@ -53,68 +53,74 @@ type CardItem = {
   extras: { location: string; bring: string; included: string };
 };
 
-// ========= Reusable Signup Form with Turnstile =========
+// ========= Reusable Signup Form (no captcha) =========
+
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/mzzgglav"; // update if you change form ID
+
 function SignupForm({
   layout = "modal",
   brandPrimary,
   brandPrimaryHover,
-  onSuccess,
+  onSuccess = () => {},
 }: {
   layout?: "modal" | "inline";
   brandPrimary: string;
   brandPrimaryHover: string;
   onSuccess?: () => void;
 }) {
-  const formRef = useRef<HTMLFormElement | null>(null);
   const [email, setEmail] = useState("");
+  const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [msg, setMsg] = useState<null | { type: "ok" | "err"; text: string }>(null);
-
-  const getToken = () => {
-    const el = formRef.current?.querySelector('input[name="cf-turnstile-response"]') as HTMLInputElement | null;
-    return el?.value || "";
-  };
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setMsg(null);
-
-    const token = getToken();
-    if (!token) {
-      setMsg({ type: "err", text: "Please complete the captcha." });
-      return;
-    }
+    setError(null);
+    setSubmitting(true);
 
     try {
-      setSubmitting(true);
-      const res = await fetch("/api/subscribe", {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, token }),
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data?.message || "Failed to sign up");
 
-      setMsg({ type: "ok", text: "Thanks! Please check your inbox." });
-      setEmail("");
-      onSuccess?.();
-    } catch (err: unknown) {
-      const text = err instanceof Error ? err.message : "Something went wrong. Please try again.";
-      setMsg({ type: "err", text });
+      if (!res.ok) {
+        const text = await res.text();
+        console.error("Formspree error:", text);
+        setError("Something went wrong. Please try again.");
+        return;
+      }
+
+      setSubmitted(true);
+      onSuccess();
+    } catch (err) {
+      console.error(err);
+      setError("Network error. Please try again.");
     } finally {
       setSubmitting(false);
-      if (formRef.current) {
-        const widget = formRef.current.querySelector(".cf-turnstile");
-        if (widget && window.turnstile?.reset) window.turnstile.reset(widget);
-      }
     }
   };
 
+  if (submitted) {
+    return (
+      <p className="text-gray-800">
+        Thanks! You’re on the list.
+      </p>
+    );
+  }
+
   return (
     <form
-      ref={formRef}
       onSubmit={handleSubmit}
-      className={layout === "modal" ? "flex flex-col gap-4" : "flex w-full max-w-md mx-auto md:ml-auto md:mr-0 gap-2"}
+      className={
+        layout === "modal"
+          ? "flex flex-col gap-4"
+          : "flex w-full max-w-md mx-auto md:ml-auto md:mr-0 gap-2"
+      }
     >
       <Input
         type="email"
@@ -123,27 +129,40 @@ function SignupForm({
         placeholder="Your email address"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        className={layout === "modal" ? "w-full border-gray-300 shadow-sm text-center py-3 text-base" : "w-full border-gray-300 shadow-sm"}
+        className={
+          layout === "modal"
+            ? "w-full border-gray-300 shadow-sm text-center py-3 text-base"
+            : "w-full border-gray-300 shadow-sm"
+        }
       />
 
-      <div className="cf-turnstile" data-sitekey={TURNSTILE_SITE_KEY} data-theme="light" data-size={layout === "modal" ? "compact" : "normal"} />
+      {error && (
+        <p className="text-sm text-red-600 w-full">
+          {error}
+        </p>
+      )}
 
       <Button
         type="submit"
         disabled={submitting}
-        className={layout === "modal" ? "w-full text-white px-6 py-3 rounded-lg text-lg shadow hover:opacity-95" : "text-white whitespace-nowrap shadow hover:opacity-95"}
+        className={
+          layout === "modal"
+            ? "w-full text-white px-6 py-3 rounded-lg text-lg shadow hover:opacity-95 disabled:opacity-60 disabled:cursor-not-allowed"
+            : "text-white whitespace-nowrap shadow hover:opacity-95 disabled:opacity-60 disabled:cursor-not-allowed"
+        }
         style={{ backgroundColor: brandPrimary }}
-        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = brandPrimaryHover)}
-        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = brandPrimary)}
+        onMouseEnter={(e) =>
+          (e.currentTarget.style.backgroundColor = brandPrimaryHover)
+        }
+        onMouseLeave={(e) =>
+          (e.currentTarget.style.backgroundColor = brandPrimary)
+        }
       >
         {submitting ? "Submitting…" : "Sign Me Up!"}
       </Button>
-
-      {msg && <p className={msg.type === "ok" ? "text-green-600 text-sm" : "text-red-600 text-sm"}>{msg.text}</p>}
     </form>
   );
 }
-
 export default function Dabble() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [detailsModal, setDetailsModal] = useState<{ open: boolean; item: CardItem | null; accent: Accent | null }>({
@@ -220,16 +239,6 @@ export default function Dabble() {
   }, [mobileOpen, detailsModal.open]);
 
   const cardData: CardItem[] = [
-        {
-      title: "SEASONAL LINOPRINTING – the Castle in Dulwich",
-      details: "Thu 20th Nov, 7.45 - 9.45 pm​ • £40",
-      image: "/linoprint.jpg",
-      link: "/class/seasonal_linoprinting",
-      long: "Get creative this festive season and design your own hand-printed Christmas cards and gift tags! In this workshop, you’ll learn the basics of linocut printing, from designing a simple festive motif to safely carving your block and printing it onto beautiful card and paper. Whether you’re a beginner or have tried linoprinting before, this session is a chance to experiment, relax, and take home a set of unique handmade prints perfect for gifting.",
-      meta: { size: "Medium", level: "Open to all", duration: "2 hrs" },
-      instructor: { name: "Lynn.", bio: "Lynn has 20 years of experience of working in education as an art  teacher and as a lecturer.  Lynn has  taught art extensively in London schools and collaborated with a vast range of artists, art organisations and galleries." },
-      extras: { location: "The Castle, 280 Crystal Palace Rd, London SE22 9JJ", bring: "Good mood", included: "Art supplies" },
-    },
     {
       title: "WINTRY LANDSCAPES – the Castle in Dulwich",
       details: "Thu 27th Nov, 7.45 - 9.45 pm​ • £35",
@@ -475,7 +484,7 @@ export default function Dabble() {
               </div>
 
               <div className="p-6 md:px-8 border-t flex flex-col sm:flex-row gap-3" style={{ borderColor: `${detailsModal.accent.accent}40` }}>
-                <Button onClick={() => { openSignup(); closeDetails(); }} className="w-full text-white shadow hover:opacity-95" style={{ backgroundColor: detailsModal.accent.accent }}>Join & Book</Button>
+                <Button onClick={() => { openSignup(); closeDetails(); }} className="w-full text-white shadow hover:opacity-95" style={{ backgroundColor: detailsModal.accent.accent }}>Book class</Button>
                 <Button variant="outline" className="w-full bg-white" style={{ borderColor: detailsModal.accent.accent, color: detailsModal.accent.accent }} onClick={closeDetails}>Keep Browsing</Button>
               </div>
             </div>

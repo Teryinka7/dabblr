@@ -84,7 +84,7 @@ export default function SignupModal({ open, onClose }: { open: boolean; onClose:
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
-        <h2 className="text-3xl font-bold mb-3 text-[#215D59]">Join Our Beta</h2>
+        <h2 className="text-3xl font-bold mb-3 text-[#215D59]">Sign up for a class</h2>
         <p className="text-gray-700 mb-6 text-lg">Be the first to access early classes and exclusive offers.</p>
         <SignupForm layout="modal" brandPrimary="#215D59" brandPrimaryHover="#1A4B47" onSuccess={handleClose} />
       </div>

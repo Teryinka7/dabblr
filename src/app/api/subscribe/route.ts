@@ -1,8 +1,12 @@
 // src/app/api/subscribe/route.ts
 import { NextResponse } from "next/server";
 
-const TURNSTILE_SECRET = process.env.TURNSTILE_SECRET_KEY || "";
-const FORMSPREE_FORM_ID = process.env.FORMSPREE_FORM_ID || "mzzgglav"; // your current ID
+const TURNSTILE_SECRET = process.env.TURNSTILE_SECRET_KEY ?? "";
+const FORMSPREE_FORM_ID = process.env.FORMSPREE_FORM_ID ?? "mzzgglav";
+
+if (!TURNSTILE_SECRET) {
+  throw new Error("TURNSTILE_SECRET_KEY env var is not set");
+}
 
 export async function POST(req: Request) {
   try {
@@ -17,6 +21,7 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
+
     if (!token) {
       return NextResponse.json(
         { message: "Captcha token missing" },
@@ -31,8 +36,8 @@ export async function POST(req: Request) {
         method: "POST",
         headers: { "content-type": "application/x-www-form-urlencoded" },
         body: new URLSearchParams({
-          secret: TURNSTILE_SECRET,
-          response: token,
+          secret: TURNSTILE_SECRET, // always a string now
+          response: token,          // guarded above
         }),
       }
     );
@@ -65,8 +70,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ ok: true });
   } catch (err: unknown) {
-    const message =
-      err instanceof Error ? err.message : "Unexpected error";
+    const message = err instanceof Error ? err.message : "Unexpected error";
     return NextResponse.json({ message }, { status: 500 });
   }
 }
